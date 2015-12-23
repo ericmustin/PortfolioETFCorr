@@ -6,8 +6,28 @@ var staticSymbol = ['SPY','XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY']
 var topCorr;
 var corrSymbol;
 var indexCount = 0;
-var indexDisplay = "Index "+indexCount;
 var initialDataCheck = 0;
+
+
+function adjustDisplay() {
+	var currentCount = indexCount;
+	console.log(currentCount);
+	$('.currentIndex').find('li').removeClass('hider');
+	$('.currentIndex').find('li').filter(function() {
+		return (!$(this).hasClass(currentCount));
+	}).addClass('hider');
+}
+
+function clearData() {
+	userIndex = {};
+	$('#restart').addClass('hider');
+	$('#calc').addClass('hider');
+	topCorr;
+	$(".currentIndex").find('li').filter(function() {
+		return $(this).attr("class") !== indexCount;}).addClass('hider');
+
+}
+
 
 function determineIndex(indexObject) {
 	$.each(indexObject, function(key,val){
@@ -17,14 +37,6 @@ function determineIndex(indexObject) {
 	});
 }
 
-function returnsAsPercentage(closeArray) {
-	var results =[];
-		for(var i=1; i < closeArray.length; i++) {
-			results.push((closeArray[i] - closeArray[i-1])/closeArray[i-1]*100);
-		}
-	return results;
-			
-}
 
 function combineIndexReturns(indexObject) {
 	var combinedArray = [];
@@ -41,6 +53,15 @@ function combineIndexReturns(indexObject) {
 
 function retrieveData(inputURL,destinationObject) {
 	var tempData = [];
+
+	function returnsAsPercentage(closeArray) {
+		var results =[];
+		for(var i=1; i < closeArray.length; i++) {
+			results.push((closeArray[i] - closeArray[i-1])/closeArray[i-1]*100);
+		}
+		return results;			
+		}
+
 	$.getJSON(inputURL, function(data) {
         $.each(data, function(key,val) {
         	var resultsArray = val.results.quote;
@@ -55,48 +76,48 @@ function retrieveData(inputURL,destinationObject) {
 			$('#getData').removeClass('hider');
 		}
     });
-	
-}
-
-function detectSymbol(object,symbol,weight) {
-	if(object[symbol] == undefined)
-		{
-		object[symbol] = {};
-		object[symbol].weighting = weight/100;
-		object[symbol].URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22'+symbol+'%22%20and%20startDate%20%3D%20%22'+startDate+'%22%20and%20endDate%20%3D%20%22'+endDate+'%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=';
-		retrieveData(object[symbol].URL,object[symbol]);
-		}
 }
 
 
 function addToIndex(){
 	var inputSymbol = $('#yourSymbol').val();
 	var inputWeight =$('#yourWeighting').val();
-	function publishToPage(ticker,weight) {
+	function publishToPage(ticker,weight,index) {
 		var items = [];
 		var $ul;
-		items.push('<li><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
+		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
+		console.log(index);
 		setTimeout(function() {
 			$ul = $('<ul />').appendTo('.currentIndex');
 			$ul.append(items);
 		},2000);
-		indexCount++;
 		}
 
-		publishToPage(inputSymbol,inputWeight)
+		publishToPage(inputSymbol,inputWeight,indexCount)
 		$('#yourSymbol').val("");
 		$('#yourWeighting').val("");
 
 }
 
 function pullData() {
-	    var inputSymbol = $('#yourSymbol').val();
-	    var inputWeight =$('#yourWeighting').val();
-        detectSymbol(userIndex,inputSymbol,inputWeight);
+	var inputSymbol = $('#yourSymbol').val();
+	var inputWeight =$('#yourWeighting').val();
 
-        addToIndex();
-        $('#calc').removeClass('hider');
-    }
+	function detectSymbol(object,symbol,weight) {
+		if(object[symbol] == undefined) {
+			object[symbol] = {};
+			object[symbol].weighting = weight/100;
+			object[symbol].URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22'+symbol+'%22%20and%20startDate%20%3D%20%22'+startDate+'%22%20and%20endDate%20%3D%20%22'+endDate+'%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=';
+			retrieveData(object[symbol].URL,object[symbol]);
+		}
+	}
+
+    detectSymbol(userIndex,inputSymbol,inputWeight);
+
+     addToIndex();
+     adjustDisplay();
+     $('#calc').removeClass('hider');
+}
 
 function calculateDetails(indexReturns,staticReturns) {
 	var returns;
@@ -158,39 +179,44 @@ function pullStaticData() {
 }
 
 function determineCorrelation(){
-topCorr;
-corrSymbol;
+topCorr = -1;
+corrSymbol = "None";
 
 for(var i=0; i < staticSymbol.length; i++)
 	{
-		staticObject[staticSymbol[i]].correlation = 0;
-staticObject[staticSymbol[i]].correlation = calculateDetails(userIndex.indexReturns,staticObject[staticSymbol[i]].adjustedPriceData);
-	console.log(staticObject[staticSymbol[i]].correlation);
-if(topCorr === undefined) {
-	topCorr = staticObject[staticSymbol[i]].correlation;
-	corrSymbol = staticSymbol[i];
-}
-else if(staticObject[staticSymbol[i]].correlation > topCorr) {
-	topCorr = staticObject[staticSymbol[i]].correlation;
-	corrSymbol = staticSymbol[i];
-}
-}
+	staticObject[staticSymbol[i]].correlation = 0;
+	staticObject[staticSymbol[i]].correlation = calculateDetails(userIndex.indexReturns,staticObject[staticSymbol[i]].adjustedPriceData);
+
+	if(topCorr === undefined) {
+		topCorr = staticObject[staticSymbol[i]].correlation;
+		corrSymbol = staticSymbol[i];
+		}
+	else if(staticObject[staticSymbol[i]].correlation > topCorr) {
+		topCorr = staticObject[staticSymbol[i]].correlation;
+		corrSymbol = staticSymbol[i];
+		}
+	}
 }
 
 function programFire() {
-		function publishToPage(correlation,index,stockBenchmark) {
+	function publishToPage(correlation,index,stockBenchmark) {
+		var indexDisplay = "Index "+index;
 		var items = [];
 		var $ul;
-		items.push('<li class="'+index+'"><span>' +index+ ' can be hedged using ' + stockBenchmark + ' which has a correlation of: '+ correlation +'</span> </li>');
+		items.push('<li class="'+indexCount+'"><span> <button class='+indexCount+'>'+indexDisplay+'</button> can be hedged using ' + stockBenchmark + ' which has a correlation of: '+ correlation +'</span> </li>');
 		setTimeout(function() {
-			$ul = $('<ul />').appendTo('.content');
-			$ul.append(items);
-		},2000);
-		indexCount++;
+			
+		$ul = $('<ul />').appendTo('.corrHistory');
+		$ul.append(items);
 		}
+		,2000);
 
-determineIndex(userIndex);
-combineIndexReturns(userIndex);
-determineCorrelation();
-publishToPage(topCorr.toFixed(2),indexDisplay,corrSymbol);
+	}
+
+	determineIndex(userIndex);
+	combineIndexReturns(userIndex);
+	determineCorrelation();
+	publishToPage(topCorr.toFixed(2),indexCount,corrSymbol);
+	indexCount++;
+	$('#restart').removeClass('hider');
 }

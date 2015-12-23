@@ -8,14 +8,24 @@
     <body>
 
 <div class="content">
-    <h1>Please Input Ticker Below and Press Enter to Update</h1>
+	<h1>Simplify Your Portfolio Hedging</h1>
+	<h4> First, create an index of the Stocks, Mutual Funds, and ETFs you own. Then, determine which GICS Sector has the strongest correlation.</h4>
+  	<h2>Please Input Ticker Below and Press Enter to Update</h2>
+  	<input type="text" id="yourSymbol" value="AAPL"/>
+    <input type="number" id="yourWeighting" value="100"/>
+    <button id="getData" class="hider">Press to Add Ticker to Index!</button>
+    <button id="calc" class="hider">Press to Calculate Best Portfolio Hedge</button>
+    <button id="restart" class="hider">Press to Start a New Index</button>
+    <br>
     <ul class="currentIndex">
     <h1> Your Current Index</h1>
     </ul>
-    <input type="text" id="yourSymbol" value="AAPL"/></li>
-    <input type="number" id="yourWeighting" value="100"/></li>
-    <button id="getData" class="hider">Press To Add Ticker to Index!</button>
-    <button id="calc" class="hider">Press to Calculate Best Portfolio Hedge</button>
+    <ul class="corrHistory">
+    <h1> Your Correlations</h1>
+    </ul>
+    
+
+
 
 </div>
 <script>
@@ -30,8 +40,22 @@ $('#getData').on('click',pullData);
 
 $('#calc').on('click', programFire);
 
+$('#restart').on('click',clearData);
+
+$('.corrHistory').on('mouseenter', 'button', function() {
+	var buttonC = $(this).attr('class');
+	console.log(buttonC);
+	$('.currentIndex').find('li').filter(function() {
+		return $(this).hasClass(buttonC);
+	}).clone().addClass('appendE').removeClass('hider').appendTo($(this).closest('ul'));
+}).on('mouseleave', 'button',function() {
+	$(this).closest('ul').find('li').filter(function(){
+		return $(this).hasClass('appendE');
+	}).remove();
 });
 
-	    </script>
+});
+
+ </script>
 </body>
 </html>
