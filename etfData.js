@@ -8,6 +8,18 @@ var corrSymbol;
 var indexCount = 0;
 var initialDataCheck = 0;
 
+function getStockTwits() {
+
+
+$.getJSON('https://api.stocktwits.com/api/2/oauth/authorize?client_id=56e3aee4276e5726&response_type
+	=token&redirect_uri=https://ericmustin.github.io/PortfolioETFCorr&scope=read', function(data){
+    $.each(data, function(key,val) {
+    console.log(key);
+	console.log(value);
+	});
+});
+}
+
 
 function adjustDisplay() {
 	var currentCount = indexCount;
@@ -169,6 +181,7 @@ function calculateDetails(indexReturns,staticReturns) {
 }
 
 function pullStaticData() {
+	getStockTwits();
 	console.log(staticObject);
 	console.log(staticSymbol[0]);
 	for(var i =0; i< staticSymbol.length; i++) {
