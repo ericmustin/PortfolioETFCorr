@@ -267,6 +267,8 @@ for(var i=0; i < staticSymbol.length; i++)
 	{
 	staticObject[staticSymbol[i]].correlation = 0;
 	staticObject[staticSymbol[i]].correlation = calculateDetails(userIndex.indexReturns,staticObject[staticSymbol[i]].adjustedPriceData);
+	console.log(staticSymbol[i]);
+	console.log(staticObject[staticSymbol[i]].correlation);
 
 	if(topCorr === undefined) {
 		topCorr = staticObject[staticSymbol[i]].correlation;
