@@ -192,7 +192,7 @@ function pullDataTwit() {
 
     detectSymbol(userIndex,inputSymbol,inputWeight);
 
-     addToIndex();
+     addToIndexTwit();
      adjustDisplay();
      
 }
