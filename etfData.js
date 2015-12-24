@@ -11,10 +11,10 @@ var initialDataCheck = 0;
 function getStockTwits() {
 
 
-$.getJSON('https://api.stocktwits.com/api/2/streams/trending.json', function(data){
+$.getJSON('http://anyorigin.com/get?url=https%3A//api.stocktwits.com/api/2/streams/trending.json&callback=?', function(data){
     $.each(data, function(key,val) {
     console.log(key);
-	console.log(value);
+	console.log(val);
 	});
 });
 }
