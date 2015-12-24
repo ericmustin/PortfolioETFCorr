@@ -114,6 +114,26 @@ function addToIndex(){
 
 }
 
+function addToIndexTwit(){
+	var inputSymbol = $('#yourSymbol').val();
+	var inputWeight =$('#yourWeighting').val();
+	function publishToPage(ticker,weight,index) {
+		var items = [];
+		var $ul;
+		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
+		console.log(index);
+		setTimeout(function() {
+			$ul = $('<ul />').appendTo('.currentIndex');
+			$ul.append(items);
+		},2000);
+		}
+
+		publishToPage(inputSymbol,inputWeight,indexCount)
+		$('#yourSymbol').val("");
+		$('#yourWeighting').val("");
+
+}
+
 function pullData() {
 	var inputSymbol = $('#yourSymbol').val();
 	var inputWeight =$('#yourWeighting').val();
@@ -135,6 +155,25 @@ function pullData() {
 }
 
 function pullDataTwit() {
+
+	function addToIndexTwit(){
+
+		function publishToPage(ticker,weight,index) {
+		var items = [];
+		var $ul;
+		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
+		console.log(index);
+		setTimeout(function() {
+			$ul = $('<ul />').appendTo('.currentIndex');
+			$ul.append(items);
+		},2000);
+		}
+
+		publishToPage(inputSymbol,inputWeight,indexCount)
+		$('#yourSymbol').val("");
+		$('#yourWeighting').val("");
+
+	}
 
 	function detectSymbol(object,symbol,weight) {
 		if(object[symbol] == undefined) {
