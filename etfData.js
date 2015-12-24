@@ -7,14 +7,17 @@ var topCorr;
 var corrSymbol;
 var indexCount = 0;
 var initialDataCheck = 0;
+var twitArray = [];
 
 function getStockTwits() {
 
 
 $.getJSON('http://anyorigin.com/get?url=https%3A//api.stocktwits.com/api/2/trending/symbols/equities.json&callback=?', function(data){
     $.each(data, function(key,val) {
-    console.log(key);
-	console.log(val.symbols[0].symbol);
+    var twitData = val.symbols;
+    for(var i = 0; i < twitData.length; i++) {
+    	twitArray.push(twitData[i].symbol);
+    }
 	});
 });
 }
