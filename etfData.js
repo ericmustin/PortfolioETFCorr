@@ -135,9 +135,6 @@ function pullData() {
 }
 
 function pullDataTwit() {
-	for (var i = 0; i < twitArray.length; i++) {
-	var inputSymbol = twitArray[i];
-	var inputWeight = 3.3333;
 
 	function detectSymbol(object,symbol,weight) {
 		if(object[symbol] == undefined) {
@@ -148,11 +145,19 @@ function pullDataTwit() {
 		}
 	}
 
+	for (var i = 0; i < twitArray.length; i++) {
+	var inputSymbol = twitArray[i];
+	var inputWeight = 3.3333;
+
+	
+
     detectSymbol(userIndex,inputSymbol,inputWeight);
 
      addToIndex();
      adjustDisplay();
-     $('#calc').removeClass('hider');
+     
+}
+$('#calc').removeClass('hider');
 }
 
 function calculateDetails(indexReturns,staticReturns) {
