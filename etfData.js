@@ -11,8 +11,7 @@ var initialDataCheck = 0;
 function getStockTwits() {
 
 
-$.getJSON('https://api.stocktwits.com/api/2/oauth/authorize?client_id=56e3aee4276e5726&response_type
-	=token&redirect_uri=https://ericmustin.github.io/PortfolioETFCorr&scope=read', function(data){
+$.getJSON('https://api.stocktwits.com/api/2/streams/trending.json', function(data){
     $.each(data, function(key,val) {
     console.log(key);
 	console.log(value);
