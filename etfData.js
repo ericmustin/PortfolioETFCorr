@@ -16,6 +16,7 @@ $.getJSON('http://anyorigin.com/get?url=https%3A//api.stocktwits.com/api/2/trend
     $.each(data, function(key,val) {
     var twitData = val.symbols;
     for(var i = 0; i < twitData.length; i++) {
+    	console.log(twitData[i].symbol);
     	twitArray.push(twitData[i].symbol);
     }
 	});
