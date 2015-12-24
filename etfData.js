@@ -134,6 +134,27 @@ function pullData() {
      $('#calc').removeClass('hider');
 }
 
+function pullDataTwit() {
+	for (var i = 0; i < twitArray.length; i++) {
+	var inputSymbol = twitArray[i];
+	var inputWeight = 3.3333;
+
+	function detectSymbol(object,symbol,weight) {
+		if(object[symbol] == undefined) {
+			object[symbol] = {};
+			object[symbol].weighting = weight/100;
+			object[symbol].URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22'+symbol+'%22%20and%20startDate%20%3D%20%22'+startDate+'%22%20and%20endDate%20%3D%20%22'+endDate+'%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=';
+			retrieveData(object[symbol].URL,object[symbol]);
+		}
+	}
+
+    detectSymbol(userIndex,inputSymbol,inputWeight);
+
+     addToIndex();
+     adjustDisplay();
+     $('#calc').removeClass('hider');
+}
+
 function calculateDetails(indexReturns,staticReturns) {
 	var returns;
 	var returnsStatic;
