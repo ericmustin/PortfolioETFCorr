@@ -14,7 +14,7 @@ function getStockTwits() {
 $.getJSON('http://anyorigin.com/get?url=https%3A//api.stocktwits.com/api/2/trending/symbols/equities.json&callback=?', function(data){
     $.each(data, function(key,val) {
     console.log(key);
-	console.log(val.symbols.0.symbol);
+	console.log(val.symbols[0].symbol);
 	});
 });
 }
