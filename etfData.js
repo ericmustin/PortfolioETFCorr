@@ -2,13 +2,38 @@ var userIndex = {};
 var endDate = '2015-12-18';
 var startDate = '2015-01-01';
 var staticObject = {};
-var staticSymbol = ['SPY','XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY'];
+var staticSymbol = ['SPY','XLB','XLE','XLF','XLI','XLK','XLP','XLU','XLV','XLY','EEM','IWM','EFA','HYG','QQQ','DIA','TLT','FXI','GDX','IYR','GLD','IBB','XOP','EWZ','EWJ','LQD','HEDJ','VTI','IWD','IWF','AMLP','ERUS','EWT','EZU','VEA','UNG','USO','DBC','SLV','EWG','KBE','KRE','XRT','EPI','ITB','EWY','BND','SMH','VT','ACWI','ACWX','SHY','TLT','EWU','EWA','XME','EWW','FCG','PFF','IEF','EWP','EWI','EWN','EDEN','FM','EZA','EWM','THD','VNM','ENZL','ECH','EPU','EWC','EWD','EWH','EWL','EWQ','EWS','RSP','SPLV','SPHB'];
 var topCorr;
 var corrSymbol;
 var indexCount = 0;
 var initialDataCheck = 0;
-var twitArray = [];
+//var twitArray = [];
 
+/*
+function getBarCharts() {
+
+$.getJSON('http://anyorigin.com/get?url=http%3A//marketdata.websol.barchart.com/getHistory.json%3Fkey%3Daeaa2802ca85c7f74a6059ff48f63b80%26symbol%3DIBM%26type%3Ddaily%26startDate%3D20141227000000&callback=?', function(data){
+    $.each(data, function(key,val) {
+    	console.log(key);
+    	console.log(val);
+    });
+});
+}
+*/
+
+
+    	/*
+    var twitData = val.symbols;
+    for(var i = 0; i < twitData.length; i++) {
+    	twitArray.push(twitData[i].symbol);
+    }
+	});
+});
+
+*/
+
+
+/*
 function getStockTwits() {
 
 
@@ -16,17 +41,16 @@ $.getJSON('http://anyorigin.com/get?url=https%3A//api.stocktwits.com/api/2/trend
     $.each(data, function(key,val) {
     var twitData = val.symbols;
     for(var i = 0; i < twitData.length; i++) {
-    	console.log(twitData[i].symbol);
     	twitArray.push(twitData[i].symbol);
     }
 	});
 });
 }
+*/
 
 
 function adjustDisplay() {
 	var currentCount = indexCount;
-	console.log(currentCount);
 	$('.currentIndex').find('li').removeClass('hider');
 	$('.currentIndex').find('li').filter(function() {
 		return (!$(this).hasClass(currentCount));
@@ -68,7 +92,6 @@ function combineIndexReturns(indexObject) {
 
 function retrieveData(inputURL,destinationObject) {
 	var tempData = [];
-
 	function returnsAsPercentage(closeArray) {
 		var results =[];
 		for(var i=1; i < closeArray.length; i++) {
@@ -101,7 +124,6 @@ function addToIndex(){
 		var items = [];
 		var $ul;
 		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
-		console.log(index);
 		setTimeout(function() {
 			$ul = $('<ul />').appendTo('.currentIndex');
 			$ul.append(items);
@@ -114,6 +136,7 @@ function addToIndex(){
 
 }
 
+/*
 function addToIndexTwit(){
 	var inputSymbol = $('#yourSymbol').val();
 	var inputWeight =$('#yourWeighting').val();
@@ -121,7 +144,6 @@ function addToIndexTwit(){
 		var items = [];
 		var $ul;
 		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
-		console.log(index);
 		setTimeout(function() {
 			$ul = $('<ul />').appendTo('.currentIndex');
 			$ul.append(items);
@@ -133,6 +155,8 @@ function addToIndexTwit(){
 		$('#yourWeighting').val("");
 
 }
+
+*/
 
 function pullData() {
 	var inputSymbol = $('#yourSymbol').val();
@@ -154,6 +178,8 @@ function pullData() {
      $('#calc').removeClass('hider');
 }
 
+
+/*
 function pullDataTwit() {
 
 	function addToIndexTwit(){
@@ -162,7 +188,6 @@ function pullDataTwit() {
 		var items = [];
 		var $ul;
 		items.push('<li class="'+index+'"><span>Symbol: '+ticker+' , Weighting: ' +weight+'%</span></li>');
-		console.log(index);
 		setTimeout(function() {
 			$ul = $('<ul />').appendTo('.currentIndex');
 			$ul.append(items);
@@ -198,6 +223,8 @@ function pullDataTwit() {
 }
 $('#calc').removeClass('hider');
 }
+
+*/
 
 function calculateDetails(indexReturns,staticReturns) {
 	var returns;
@@ -249,9 +276,7 @@ function calculateDetails(indexReturns,staticReturns) {
 }
 
 function pullStaticData() {
-	getStockTwits();
-	console.log(staticObject);
-	console.log(staticSymbol[0]);
+	//getStockTwits();
 	for(var i =0; i< staticSymbol.length; i++) {
 		staticObject[staticSymbol[i]]={};
 	staticObject[staticSymbol[i]].URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22'+staticSymbol[i]+'%22%20and%20startDate%20%3D%20%22'+startDate+'%22%20and%20endDate%20%3D%20%22'+endDate+'%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=';
